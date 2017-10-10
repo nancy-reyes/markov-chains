@@ -54,7 +54,13 @@ def make_chains(text_string):
         else:
             chains[bigram].append(text_string[i+2])
 
+    second_last = text_string[-2]
+    last = text_string[-1]
+    last_bigram = (second_last,last)
+    chains[last_bigram] = None
+
     return chains
+
 
 
 def make_text(chains):
@@ -62,16 +68,28 @@ def make_text(chains):
 
     words = []
 
+    random_bigram = choice(chains.keys())  # This is a tuple
+    # words.append(random_bigram)
+    words = list(random_bigram)
+    new_key = random_bigram
 
-    # get length of dictionary
-    #dict_length = len(chains.items())
-    random_word = choice(chains.items())
-    
+    while True:
+        if chains[new_key] == None:
+            break
+        random_word = choice(chains[new_key]) 
+        words.append(random_word)
+        new_key  = (new_key[1],random_word)
+
+    # print chains[new_key]  # this is a LIST
+    #for chain in chains:
+    # new_key = (random_bigram[1], choice(chains[random_bigram]))
+    # print random_bigram, new_key
+
+
     return " ".join(words)
 
 
-input_path = "green-eggs.txt"
-
+input_path = "dtspeeches.txt"
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
