@@ -9,6 +9,7 @@ def open_and_read_file(file_path):
     Takes a string that is a file path, opens the file, and turns
     the file's contents as one string of text.
     """
+
     file_obj = open(file_path)
     contents = file_obj.read()
     file_obj.close()
@@ -42,6 +43,7 @@ def make_chains(text_string):
     """
 
     chains = {}
+
     text_string = text_string.split()
 
     for i in range(len(text_string) - 2):
@@ -60,11 +62,11 @@ def make_text(chains):
 
     words = []
 
+
     # get length of dictionary
     #dict_length = len(chains.items())
     random_word = choice(chains.items())
     
-
     return " ".join(words)
 
 
@@ -74,9 +76,11 @@ input_path = "green-eggs.txt"
 input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
-#print chains
+chains = make_chains(input_text)
 
 # Produce random text
 random_text = make_text(chains)
 
-#print random_text
+
+print random_text
+
