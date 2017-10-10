@@ -42,8 +42,15 @@ def make_chains(text_string):
     """
 
     chains = {}
+    text_string = text_string.split()
 
-    # your code goes here
+    for i in range(len(text_string) - 2):
+        bigram = (text_string[i], text_string[i + 1])
+        
+        if bigram not in chains:
+            chains[bigram] = [text_string[i+2]]
+        else:
+            chains[bigram].append(text_string[i+2])
 
     return chains
 
@@ -53,7 +60,10 @@ def make_text(chains):
 
     words = []
 
-    # your code goes here
+    # get length of dictionary
+    #dict_length = len(chains.items())
+    random_word = choice(chains.items())
+    
 
     return " ".join(words)
 
@@ -62,12 +72,11 @@ input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
-print input_text
 
 # Get a Markov chain
-#chains = make_chains(input_text)
+#print chains
 
 # Produce random text
-#random_text = make_text(chains)
+random_text = make_text(chains)
 
 #print random_text
