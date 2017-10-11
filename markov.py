@@ -2,6 +2,8 @@
 
 from random import choice
 
+import sys
+import string
 
 def open_and_read_file(file_path):
     """Take file path as string; return text as string.
@@ -37,7 +39,7 @@ def make_chains(text_string):
 
         >>> chains[('hi', 'there')]
         ['mary', 'juanita']
-        
+
         >>> chains[('there','juanita')]
         [None]
     """
@@ -47,8 +49,13 @@ def make_chains(text_string):
     text_string = text_string.split()
 
     for i in range(len(text_string) - 2):
+        # we need to make bigram into a list that will be appended to
+        # n times, and then turn the list into a tuple
+        # list will have object i and loop n times.
+
+
         bigram = (text_string[i], text_string[i + 1])
-        
+
         if bigram not in chains:
             chains[bigram] = [text_string[i+2]]
         else:
@@ -67,8 +74,23 @@ def make_text(chains):
     """Return text from chains."""
 
     words = []
+    punctuation = ['.','?','!']
+
+
+    # While true, if random_bigram's tuple starts with a capital letter, break
+    # else choose a new random bigrram.
+
 
     random_bigram = choice(chains.keys())  # This is a tuple
+    punct = set(string.punctuation)
+
+    while True:
+        if (random_bigram[0][0] == random_bigram[0][0].upper() and
+            random_bigram[0][0] not in punct):
+            break
+        else:
+            random_bigram = choice(chains.keys())
+
     # words.append(random_bigram)
     words = list(random_bigram)
     new_key = random_bigram
@@ -76,8 +98,12 @@ def make_text(chains):
     while True:
         if chains[new_key] == None:
             break
-        random_word = choice(chains[new_key]) 
+        random_word = choice(chains[new_key])
         words.append(random_word)
+
+        if random_word[-1] in punctuation:
+            break
+
         new_key  = (new_key[1],random_word)
 
     # print chains[new_key]  # this is a LIST
@@ -89,7 +115,7 @@ def make_text(chains):
     return " ".join(words)
 
 
-input_path = "dtspeeches.txt"
+input_path = sys.argv[1]
 # Open the file and turn it into one long string
 input_text = open_and_read_file(input_path)
 
