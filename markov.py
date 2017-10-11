@@ -19,7 +19,7 @@ def open_and_read_file(file_path):
     return contents
 
 
-def make_chains(text_string):
+def make_chains(text_string, n):
     """Take input text as string; return dictionary of Markov chains.
 
     A chain will be a key that consists of a tuple of (word1, word2)
@@ -48,24 +48,37 @@ def make_chains(text_string):
 
     text_string = text_string.split()
 
-    for i in range(len(text_string) - 2):
+    for i in range(len(text_string) - n):
         # we need to make bigram into a list that will be appended to
         # n times, and then turn the list into a tuple
         # list will have object i and loop n times.
 
 
-        bigram = (text_string[i], text_string[i + 1])
+        #ngram = (text_string[i], text_string[i + 1])
+        # need to build a tuple containing n items. need to append to a list, and
+        # then convert it to a tuple. a for loop that loops n times and appends
+        # each word to the list.
+        nlst = []
 
-        if bigram not in chains:
-            chains[bigram] = [text_string[i+2]]
+        for x in range(n):
+            nlst.append(text_string[x + i])
+
+        ngram = tuple(nlst)
+
+        if ngram not in chains:
+            chains[ngram] = [text_string[i+n]]
         else:
-            chains[bigram].append(text_string[i+2])
+            chains[ngram].append(text_string[i+n])
 
-    second_last = text_string[-2]
-    last = text_string[-1]
-    last_bigram = (second_last,last)
-    chains[last_bigram] = None
+    # second_last = text_string[-2]
+    # last = text_string[-1]
+    # last_ngram = (second_last,last)
+    # chains[last_ngram] = None
+    last_ngram = tuple(text_string[-n:])
+    chains[last_ngram] = None
 
+
+    print chains
     return chains
 
 
@@ -120,7 +133,7 @@ input_path = sys.argv[1]
 input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
-chains = make_chains(input_text)
+chains = make_chains(input_text,3)
 
 # Produce random text
 random_text = make_text(chains)
