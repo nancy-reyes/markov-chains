@@ -74,11 +74,10 @@ def make_chains(text_string, n):
     # last = text_string[-1]
     # last_ngram = (second_last,last)
     # chains[last_ngram] = None
+
     last_ngram = tuple(text_string[-n:])
     chains[last_ngram] = None
 
-
-    print chains
     return chains
 
 
@@ -89,15 +88,14 @@ def make_text(chains):
     words = []
     punctuation = ['.','?','!']
 
-
     # While true, if random_bigram's tuple starts with a capital letter, break
     # else choose a new random bigrram.
-
 
     random_bigram = choice(chains.keys())  # This is a tuple
     punct = set(string.punctuation)
 
-    while True:
+    while True:  # Checks for capitalization and punctuation.
+                 # otherwise, chooses a new ngram.
         if (random_bigram[0][0] == random_bigram[0][0].upper() and
             random_bigram[0][0] not in punct):
             break
@@ -105,10 +103,11 @@ def make_text(chains):
             random_bigram = choice(chains.keys())
 
     # words.append(random_bigram)
-    words = list(random_bigram)
-    new_key = random_bigram
+    words = list(random_bigram)  # turns the random bigram into a list as starting pt.
+    new_key = random_bigram  # reassigns the random ngram tuple to a new var
 
-    while True:
+    while True:  # ends the program if it comes across the end of the paragraph or a word
+                 # with a punctuation mark
         if chains[new_key] == None:
             break
         random_word = choice(chains[new_key])
@@ -117,7 +116,13 @@ def make_text(chains):
         if random_word[-1] in punctuation:
             break
 
-        new_key  = (new_key[1],random_word)
+        # This creates the new key from the previous one.
+        # This will be the old key, minus the first word, plus the random_word chosen.
+        # ding = list(new_key)
+
+        #THIS IS WHERE YOU LEFT OFF NANCY
+        new_key = (new_key[1:n+1])
+        print new_key
 
     # print chains[new_key]  # this is a LIST
     #for chain in chains:
